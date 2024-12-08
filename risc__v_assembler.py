@@ -226,29 +226,7 @@ def get_instruction_format(instruction):
         return "J"
     else:
         return None
-def count_empty_labels_between(current_address, target_address, temp_file):
-    """
-    Đếm số dòng chứa nhãn rỗng ("label:", "label1:", ...) giữa hai địa chỉ.
-    - current_address: địa chỉ lệnh hiện tại.
-    - target_address: địa chỉ nhãn mục tiêu.
-    - temp_file: đường dẫn tới file chứa code assembler tạm thời.
-    """
-    count = 0
-    with open(temp_file, "r") as file:
-        lines = file.readlines()
-
-    # Tính địa chỉ bắt đầu và kết thúc
-    start_address = min(current_address, target_address) // 4
-    end_address = max(current_address, target_address) // 4
-
-    for i, line in enumerate(lines):
-        if start_address <= i < end_address:
-            line = line.strip()
-            if line.endswith(":") and len(line.split(":", 1)[1].strip()) == 0:
-                count += 1
-
-    return count
-    
+  
 # **Bước 5: Phân tách lệnh thành các trường**
 def parse_instruction(line, labels, current_address):
     """
