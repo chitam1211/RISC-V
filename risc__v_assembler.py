@@ -122,16 +122,6 @@ FUNCT7 = {
 
 }
 
-FUNCT3_BRANCH = {
-    "BEQ": "000",
-    "BNE": "001",
-    "BLT": "100",
-    "BGE": "101",
-    "BLTU": "110",
-    "BGEU": "111",
-}
-
-
 REGISTERS = {
     f"x{i}": {
         "binary": f"{i:05b}",  # Mã nhị phân 5 bit
