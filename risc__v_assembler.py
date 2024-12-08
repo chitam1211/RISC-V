@@ -262,7 +262,7 @@ def parse_instruction(line, labels, current_address):
     
     if len(parts) < 2:
         if instruction == "NOP":
-            return "00000000000000000000000000000000"  # NOP mã máy
+            return "00000000000000000000000000000011"  # NOP mã máy
         raise ValueError(f"Lệnh {instruction} không hợp lệ hoặc thiếu toán hạng.")
     
     # Xử lý toán hạng: loại bỏ khoảng trắng và kiểm tra dấu phẩy
