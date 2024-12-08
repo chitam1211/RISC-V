@@ -248,28 +248,7 @@ def count_empty_labels_between(current_address, target_address, temp_file):
                 count += 1
 
     return count
-
-def int_to_twos_complement_20bit(num):
-    """
-    Chuyển một số nguyên thành số nhị phân bù 2 20 bit.
     
-    :param num: Số nguyên (âm hoặc dương)
-    :return: Chuỗi nhị phân dài 20 bit
-    """
-    if num < -(2**19) or num > (2**19 - 1):
-        raise ValueError("Số vượt quá phạm vi biểu diễn 20 bit bù 2.")
-    
-    if num >= 0:
-        # Số dương: chỉ cần chuyển sang nhị phân và thêm đủ 20 bit
-        binary = bin(num)[2:]  # Chuyển sang nhị phân (bỏ tiền tố '0b')
-        return binary.zfill(20)  # Thêm các số 0 vào đầu để đủ 20 bit
-    else:
-        # Số âm: tính bù 2
-        # Tính giá trị bù 2 của số âm
-        binary = bin((1 << 20) + num)[2:]  # (1 << 20) là 2^20
-        return binary.zfill(20)  # Đảm bảo đủ 20 bit
-
-
 # **Bước 5: Phân tách lệnh thành các trường**
 def parse_instruction(line, labels, current_address):
     """
