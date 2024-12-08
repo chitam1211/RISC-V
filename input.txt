@@ -1,0 +1,38 @@
+ADD x1, x2, x3
+ADDI x4, x5, 10
+SUB x6, x7, x8
+LUI x9, 0x1000
+AUIPC x10, 0x2000
+LB x11, 8(x12)
+LBU x13, 12(x14)
+LH x15, 16(x16)
+LHU x17, 20(x18)
+LW x19, -2(x20)
+SB x21, 28(x22)
+SH x23, -4(x24)
+SW x25, 36(x26)
+SLL x27, x28, x29
+SLLI x1, x2, 5
+SRL x3, x4, x5
+SRLI x6, x7, 3
+SRA x8, x9, x10
+SRAI x11, x12, 2
+XOR x13, x14, x15
+XORI x16, x17, 0xFF
+OR x18, x19, x20
+ORI x21, x22, 0xAB
+AND x23, x24, x25
+ANDI x26, x27, 0x0F
+SLT x28, x29, x30
+SLTI x1, x2, 100
+SLTU x3, x4, x5
+SLTIU x6, x7, 200
+BEQ x8, x9, label
+BNE x10, x11, label
+BLT x12, x13, label
+BGE x14, x15, label
+BLTU x16, x17, label
+BGEU x18, x19, label
+JAL x1, label
+JALR x1, x2, 8
+label:
