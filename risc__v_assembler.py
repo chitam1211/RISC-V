@@ -424,7 +424,7 @@ def assemble(temp_file, output_file, labels):
     """
     Dịch file assembler thành mã máy và lưu vào file output.
     - temp_file: file chứa các lệnh assembler đã xử lý.
-    - output_file: file đầu ra chứa mã máy dưới dạng hex.
+    - output_file: file đầu ra chứa mã máy dưới dạng bin.
     - labels: từ điển chứa nhãn và địa chỉ tương ứng.
     """
     with open(temp_file, "r") as infile, open(output_file, "w") as outfile:
