@@ -35,4 +35,4 @@ BLTU x16, x17, label
 BGEU x18, x19, label
 JAL x1, label
 JALR x1, x2, 8
-label:
+label: 
