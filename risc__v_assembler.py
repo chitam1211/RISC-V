@@ -39,16 +39,6 @@ OPCODES = {
     "JAL": "1101111",
     "JALR": "1100111",
     "SC.W": "0101111",
-    "AMOSWAP.W": "0101111",
-    "AMOADD.W": "0101111",
-    "AMOXOR.W": "0101111",
-    "AMOAND.W": "0101111",
-    "AMOOR.W": "0101111",
-    "AMOMIN.W": "0101111",
-    "AMOMAX.W": "0101111",
-    "AMOMINU.W": "0101111",
-    "AMOMAXU.W": "0101111",
-
 }
 
 FUNCT3 = {
@@ -87,15 +77,6 @@ FUNCT3 = {
     "BLTU": "110",
     "BGEU": "111",
     "SC.W": "011",
-    "AMOSWAP.W": "010",
-    "AMOADD.W": "010",
-    "AMOXOR.W": "010",
-    "AMOAND.W": "010",
-    "AMOOR.W": "010",
-    "AMOMIN.W": "010",
-    "AMOMAX.W": "010",
-    "AMOMINU.W": "010",
-    "AMOMAXU.W": "010",
 }
 
 FUNCT7 = {
@@ -110,16 +91,6 @@ FUNCT7 = {
     "SLT": "0000000",
     "SLTU": "0000000",
     "SC.W": "0000011",
-    "AMOSWAP.W": "0000001",
-    "AMOADD.W": "0000000",
-    "AMOXOR.W": "0000100",
-    "AMOAND.W": "0001100",
-    "AMOOR.W": "0001000",
-    "AMOMIN.W": "0010000",
-    "AMOMAX.W": "0010100",
-    "AMOMINU.W": "0011000",
-    "AMOMAXU.W": "0011100"
-
 }
 
 REGISTERS = {
