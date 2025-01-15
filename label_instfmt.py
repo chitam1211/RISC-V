@@ -1,5 +1,5 @@
 # **Bước 3: Tìm bảng băm LABEL và địa chỉ tương ứng**
-import re
+import re 
 def find_labels(temp_file, nlb_file):
     labels = {}
     with open(temp_file, "r") as infile:
