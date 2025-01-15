@@ -1,4 +1,4 @@
-import re
+import re 
 # **Bước 1: Khai báo bảng băm OPCODE, REG và FUNCT**
 OPCODES = {
     "ADD": "0110011",
