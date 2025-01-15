@@ -1,5 +1,5 @@
 # **Bước 7: Chạy chương trình**
-import sys
+import sys 
 sys.stdout.reconfigure(encoding='utf-8')
 from preprocess_normalize import preprocess_file
 from label_instfmt import find_labels
