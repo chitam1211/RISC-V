@@ -11,7 +11,10 @@ def preprocess_file(input_file, temp_file):
             if stripped_line.startswith("#"):
                 lines.append("")  # Thêm một dòng trống
                 continue
-            
+            # Giữ lại dòng trống
+            if stripped_line == "":
+                line.append()
+                continue
             # Loại bỏ chú thích (phần sau dấu #)
             line = line.split("#")[0].strip()
             # Chuyển tất cả các lệnh sang viết hoa
