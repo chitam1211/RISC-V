@@ -1,6 +1,6 @@
 # **Bước 6: Chuyển các trường thành chuỗi bit và lưu file**
 from label_instfmt import get_instruction_format
-from label_instfmt import find_labels
+from label_instfmt import find_labels 
 from parse_instruction import parse_instruction
 def assemble(nlb_file, output_file, labels):
     """
