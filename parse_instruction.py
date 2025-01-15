@@ -1,6 +1,6 @@
 # **Bước 5: Phân tách lệnh thành các trường**
 from preprocess_normalize import normalize_operands
-import re
+import re 
 from op_funct_regs import *
 from label_instfmt import get_instruction_format
 def parse_instruction(nlb_file, line, labels, current_address):
