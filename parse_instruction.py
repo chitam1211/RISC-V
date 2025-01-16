@@ -1,6 +1,6 @@
 # **Bước 5: Phân tách lệnh thành các trường**
 from preprocess_normalize import normalize_operands
-import re 
+import re
 from op_funct_regs import *
 from label_instfmt import get_instruction_format
 def parse_instruction(nlb_file, line, labels, current_address):
@@ -292,8 +292,6 @@ def parse_instruction(nlb_file, line, labels, current_address):
                         imm_value = int(imm_value, 0)
                         if imm_value > 2047 or imm_value < -2048:
                             li_detected = True
-                        else:
-                            raise ValueError(f"Lệnh LI không hợp lệ: {li_parts[1]}")
         print(f"Li detected: {li_detected}")
         # Tính offset
         if target_address > current_address:
