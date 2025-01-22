@@ -294,7 +294,9 @@ def parse_instruction(nlb_file, line, labels, current_address):
                             li_detected = True
         print(f"Li detected: {li_detected}")
         # Tính offset
-        if target_address > current_address:
+        if target_address > current_address and li_detected:
+            offset = (target_address - current_address)  - (bts * 4) + 8
+        elif target_address > current_address and not li_detected:
             offset = (target_address - current_address)  - (bts * 4) + 4
         elif target_address < current_address and li_detected:
             offset = (target_address - current_address)  + (bts * 4) 
@@ -372,7 +374,9 @@ def parse_instruction(nlb_file, line, labels, current_address):
                         if imm_value > 2047 or imm_value < -2048:
                             li_founded = True
         print(f"Li founded: {li_founded}")
-        if target_address > current_address:
+        if target_address > current_address and li_founded:
+            offset = (target_address - current_address)  - (bts * 4) + 8
+        elif target_address > current_address and not li_founded:
             offset = (target_address - current_address)  - (bts * 4) + 4
         elif target_address <current_address and li_founded:
             offset = (target_address - current_address)  + (bts * 4) 
