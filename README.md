@@ -1,5 +1,5 @@
 # RISC V
--Assembler dành cho các lệnh số nguyên 32 bit 
+- Assembler dành cho các lệnh số nguyên 32 bit 
 + Thay thế 4 đường dẫn đến input_file,output_file,temp_file,no lb file thành đường dẫn trong máy.
 + Output đang là phần .text (các lệnh mã máy 32 bit ).
 - Instruction Set Simulator dành cho Assembler số nguyên 32 bit
