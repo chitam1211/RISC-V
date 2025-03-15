@@ -51,32 +51,39 @@ def initDataMem(filename):
 
 # Save data memory back to file
 def saveDataMem(filename):
+    global dataMemoryModified
+    print(dataMemoryModified)
     with open(filename, "w") as f:
-        # Sắp xếp các địa chỉ trong dataMemory
         addresses = sorted(dataMemory.keys())
-        start_addr = addresses[0] if addresses else 0
+        if not addresses:
+            print("dmem dang rong")
+            start_addr = 0x10010000
+            for _ in range(4):
+                line = f"0x{start_addr:08x}".ljust(14)
+                for offset in range(0, 32, 4):
+                    # Mỗi ô 4 byte ở đây là 0
+                    line += "          0"  
+                f.write(line + "\n")
+                start_addr += 32
+            return
+            
+            # Nếu không rỗng, thực hiện như bình thường
+        if dataMemoryModified:
+            start_addr = addresses[0]
+            while start_addr <= addresses[-1]:
+                line = f"0x{start_addr:08x}".ljust(14)
+                for offset in range(0, 32, 4):
+                    addr = start_addr + offset
+                    value = (
+                        dataMemory.get(addr, 0)
+                        | (dataMemory.get(addr + 1, 0) << 8)
+                        | (dataMemory.get(addr + 2, 0) << 16)
+                        | (dataMemory.get(addr + 3, 0) << 24)
+                    )
+                    line += f"{value:>11}"
+                f.write(line + "\n")
+                start_addr += 32
 
-        while start_addr <= addresses[-1]:
-            # Ghi địa chỉ đầu tiên trên dòng
-            line = f"0x{start_addr:08x}".ljust(14)  # 14 khoảng trắng dành cho địa chỉ
-            
-            # Ghi các giá trị theo từng offset (cách 4 byte)
-            for offset in range(0, 32, 4):  # Offset từ 0 đến 28 (0x1C) với bước nhảy 4
-                addr = start_addr + offset
-                value = (
-                    dataMemory.get(addr, 0) |
-                    (dataMemory.get(addr + 1, 0) << 8) |
-                    (dataMemory.get(addr + 2, 0) << 16) |
-                    (dataMemory.get(addr + 3, 0) << 24)
-                )
-                
-                # Tính khoảng trắng giữa các giá trị (11 khoảng trắng mặc định cho giá trị 0)
-                spacing = 11 - len(str(value))
-                line += f"{' ' * spacing}{value}"
-            
-            # Ghi dòng hoàn chỉnh ra file
-            f.write(line + "\n")
-            start_addr += 32  # Tăng địa chỉ dòng lên 32 byte
 
 # R-Type execution
 def executeR(func3, rd, rs1, rs2, func7):
@@ -138,12 +145,14 @@ def executeI(func3, rd, rs1, imm):
     elif func3 == 0b011:  # sltiu
         reg[rd_key] = int((reg[rs1_key] & 0xFFFFFFFF) < (imm & 0xFFFFFFFF))
 
+dataMemoryModified = False
 # S-Type execution
 def executeS(func3, rs1, rs2, imm):
     global pc
     rs1_key = f"x{rs1}"
     rs2_key = f"x{rs2}"
-
+    global dataMemoryModified
+    dataMemoryModified = True
     print(f"Executing S-Type: func3={bin(func3)}, rs1={rs1_key}, rs2={rs2_key}, imm={imm}")
     print("rs1:", reg[rs1_key])
     print("rs2:", reg[rs2_key])
@@ -370,9 +379,8 @@ def main():
 
     # In ra giá trị các thanh ghi
     printRegisterFile()
-
+    
     # Lưu bộ nhớ dữ liệu cuối cùng vào file
     saveDataMem(data_memory_file)
-
 if __name__ == "__main__":
     main()
