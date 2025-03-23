@@ -6,7 +6,7 @@ from label_instfmt import find_labels
 from assemble import assemble
 def main():
     input_file = r"E:\AI accelerator\Assembler\input.txt"
-    data_file = r"E:\AI accelerator\Assembler\data.txt"
+    data_file = r"E:\AI accelerator\Assembler\predeclared_data.txt"
     temp_file = r"E:\AI accelerator\Assembler\temp.txt"
     nlb_file = r"E:\AI accelerator\Assembler\no lb.txt"
     output_file = r"E:\AI accelerator\Assembler\output.txt"
