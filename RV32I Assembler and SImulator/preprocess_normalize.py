@@ -30,6 +30,11 @@ def preprocess_file(input_file, temp_file, data_file):
 
                 stripped_line = code_part
 
+            # Xử lý dòng .globl như một phần dòng trống
+            if stripped_line.startswith(".globl"):
+                text_section.append("")  # Thêm dòng trống vào file lệnh
+                continue
+
             # Bỏ qua các dòng trống
             if not stripped_line:
                 if current_section == "text":
