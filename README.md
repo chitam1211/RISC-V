@@ -21,5 +21,7 @@
 
 ## Assembler dành cho các lệnh matrix
 - Ý tưởng: [XUANTIE-RV/riscv-matrix-extension-spec](https://github.com/XUANTIE-RV/riscv-matrix-extension-spec.git)
-- Thay thế đường dẫn của `m input` và `m output` thành các đường dẫn tương ứng trong máy.
+- Thay thế đường dẫn đến các file thành các đường dẫn tương ứng trong máy.
+`input_path  = r"E:\AI accelerator\Assembler\m input.txt"`  
+`output_path = r"E:\AI accelerator\Assembler\m output.txt"`  
 - Chạy file  `massembler.py` để biên dịch, kết quả mã máy được lưu ở  `m output.txt`.
