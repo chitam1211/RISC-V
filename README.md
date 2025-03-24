@@ -1,7 +1,13 @@
 # RISC V
 
 ## Assembler dành cho các lệnh số nguyên 32 bit
-- Thay thế 4 đường dẫn đến `input_file`, `output_file`, `temp_file`, `no lb file`, `data file` thành đường dẫn tương ứng trong máy.
+- Thay thế các đường dẫn đến các file thành các đường dẫn trong máy:
+    input_file = r"E:\AI accelerator\Assembler\input.txt"
+    data_file = r"E:\AI accelerator\Assembler\data.txt"
+    temp_file = r"E:\AI accelerator\Assembler\temp.txt"
+    nlb_file = r"E:\AI accelerator\Assembler\no lb.txt"
+    output_file = r"E:\AI accelerator\Assembler\output.txt"
+    data_memory_file = r"E:\AI accelerator\Assembler\DataMemory.txt"
 - Chạy file  `main.py` để biên dịch, kết quả mã máy được lưu ở file  `output.txt`, các biến được khai báo (.data) được lưu ở  `predeclared_data.txt`.
 
 ## Instruction Set Simulator dành cho Assembler số nguyên 32 bit
