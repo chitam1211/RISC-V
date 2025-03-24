@@ -1,7 +1,7 @@
 # RISC V
 
 ## Assembler dành cho các lệnh số nguyên 32 bit
-- Thay thế các đường dẫn đến các file thành các đường dẫn trong máy:
+- Thay thế các đường dẫn đến các file thành các đường dẫn trong máy:  
 `input_file = r"E:\AI accelerator\Assembler\input.txt"`  
 `data_file = r"E:\AI accelerator\Assembler\data.txt"`  
 `temp_file = r"E:\AI accelerator\Assembler\temp.txt"`  
