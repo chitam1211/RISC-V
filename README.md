@@ -2,7 +2,6 @@
 
 ## Assembler dành cho các lệnh số nguyên 32 bit
 - Thay thế 4 đường dẫn đến `input_file`, `output_file`, `temp_file`, `no lb file`, `data file` thành đường dẫn tương ứng trong máy.
-- Output đang là phần `.text` (các lệnh mã máy 32 bit).
 - Chạy file  `main.py` để biên dịch, kết quả mã máy được lưu ở file  `output.txt`, các biến được khai báo (.data) được lưu ở  `predeclared_data.txt`.
 
 ## Instruction Set Simulator dành cho Assembler số nguyên 32 bit
