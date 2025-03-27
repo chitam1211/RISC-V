@@ -6,9 +6,20 @@ msettileki 11 # imm = new mtilek
 msettilek tr0 # rs1 = new mtilek
 msettileni 12 # imm = new mtilen
 msettilen tr2 # rs1 = new mtilen
+mzero tr1
+mmov.mm tr1 tr0
+mmovb.x.m x1 tr1 x0
+mmovh.x.m x1 tr0 x0
+mmovw.x.m x1 tr2 x1
+mmovd.x.m x2 tr1 x4
+mmovb.m.x tr1 x1 x2
+mmovh.m.x tr2 x2 x1
+mmovw.m.x tr0 x4 x5
+mmovd.m.x tr3 x3 x5
 mfmacc.h.e5 tr2 tr1 tr0
 mfmacc.h.e4 tr2 tr1 tr0
 mfmacc.bf16.e5 tr2, tr1, tr0
+mfmacc.bf16.e4 tr2, tr1, tr0
 mfmacc.s.e5 tr2, tr1, tr0
 mfmacc.s.e4 tr2, tr1, tr0
 mfmacc.h tr2, tr1, tr0
@@ -31,8 +42,63 @@ mmaccu.d.h tr2, tr1, tr0
 mmaccus.d.h tr2, tr1, tr0
 mmaccsu.d.h tr2, tr1, tr0
 mmacc.w.bp tr2, tr1, tr0
-mlae8 tr2, (x0), x1
-mzero tr2
+mmaccu.w.bp tr2, tr1, tr0
+mlae8 tr2, (x1), x8
+mlae16 tr1, (x2), x8
+mlae32 tr3, (x3), x8
+mlae64 tr0, (x4), x8
+mlbe8 tr2, (x1), x6
+mlbe16 tr3, (x2), x6
+mlbe32 tr2, (x3), x6
+mlbe64 tr1, (x14), x7
+mlce8 tr2, (x4), x7
+mlce16 tr1, (x3), x7
+mlce32 tr2, (x2), x9
+mlce64 tr3, (x1), x9
+msae8 tr1, (x1), x9
+msae16 tr1, (x11), x10
+msae32 tr2, (x12), x11
+msae64 tr2, (x2), x12
+msbe8 tr3, (x13), x13
+msbe16 tr0, (x24), x14
+msbe32 tr3, (x2), x14
+msbe64 tr3, (x4), x13
+msce8 tr3, (x10), x12
+msce16 tr2, (x12), x11
+msce32 tr1, (x15), x12
+msce64 tr1, (x11), x22
+mlme8 tr0, (x13), x8
+mlme16 tr0, (x14), x12
+mlme32 tr0, (x15), x19
+mlme64 tr0, (x30), x16
+msme8 tr1, (x31), x14
+msme16 tr2, (x29), x13
+msme32 tr2, (x21), x28
+msme64 tr3, (x2), x27
+mlate8 tr3, (x26), x26
+mlate16 tr1, (x22), x25
+mlate32 tr1, (x23), x24
+mlate64 tr3, (x23), x21
+mlbte8 tr1, (x24), x1
+mlbte16 tr1, (x26), x23
+mlbte32 tr3, (x15), x10
+mlbte64 tr3, (x16), x11
+mlcte8 tr2, (x18), x12
+mlcte16 tr0, (x19), x13
+mlcte32 tr0, (x3), x14
+mlcte64 tr0, (x8), x15
+msate8 tr2, (x7), x16
+msate16 tr2, (x12), x12
+msate32 tr1, (x19), x12
+msate64 tr1, (x22), x12
+msbte8 tr3, (x16), x30
+msbte16 tr3, (x17), x31
+msbte32 tr3, (x20), x31
+msbte64 tr2, (x28), x25
+mscte8 tr2, (x0), x26
+mscte16 tr1, (x4), x24
+mscte32 tr1, (x4), x24
+mscte64 tr1, (x5), x19
 mmov.mm tr1, tr0
 mmovb.x.m x1, tr1, x2
 mmovb.m.x tr0, x1, x2
@@ -41,4 +107,100 @@ mpack tr2, tr1, tr0
 mrslidedown tr1, tr0, 5
 madd.w.mm tr2, tr1, tr0
 madd.w.mv.i tr2, tr1, tr0[2]
+msub.w.mm tr2, tr1, tr0
+msub.w.mv.i tr2, tr1, tr0[2]
+mmul.w.mm tr2, tr1, tr0
+mmul.w.mv.i tr2, tr1, tr0[2]
+mmulh.w.mm tr2, tr1, tr0
+mmulh.w.mv.i tr2, tr1, tr0[2]
+mmax.w.mm tr2, tr1, tr0 
+mmax.w.mv.i tr2, tr1, tr0[2]
+mumax.w.mm tr2, tr1, tr0
+mumax.w.mv.i tr2, tr1, tr0[2]
+mmin.w.mm tr2, tr1, tr0
+mmin.w.mv.i tr2, tr1, tr0[2]
+mumin.w.mm tr2, tr1, tr0
+mumin.w.mv.i tr2, tr1, tr0[2]
+msrl.w.mm tr2, tr1, tr0
+msrl.w.mv.i tr2, tr1, tr0[2]
+msll.w.mm tr2, tr1, tr0
+msll.w.mv.i tr2, tr1, tr0[2]
+msra.w.mm tr2, tr1, tr0
+msra.w.mv.i tr2, tr1, tr0[2]
+mfadd.h.mm tr2, tr1, tr0
+mfadd.h.mv.i tr2, tr1, tr0[2]
+mfadd.s.mm tr2, tr1, tr0
+mfadd.s.mv.i tr2, tr1, tr0[2]
+mfadd.d.mm tr2, tr1, tr0
+mfadd.d.mv.i tr2, tr1, tr0[2]
+mfsub.h.mm tr2, tr1, tr0
+mfsub.h.mv.i tr2, tr1, tr0[2]
+mfsub.s.mm tr2, tr1, tr0
+mfsub.s.mv.i tr2, tr1, tr0[2]
+mfsub.d.mm tr2, tr1, tr0
+mfsub.d.mv.i tr2, tr1, tr0[2]
+mfmul.h.mm tr2, tr1, tr0
+mfmul.h.mv.i tr2, tr1, tr0[2]
+mfmul.s.mm tr2, tr1, tr0
+mfmul.s.mv.i tr2, tr1, tr0[2]
+mfmul.d.mm tr2, tr1, tr0
+mfmul.d.mv.i tr2, tr1, tr0[2]
+mfmax.h.mm tr2, tr1, tr0
+mfmax.h.mv.i tr2, tr1, tr0[2] 
+mfmax.s.mm tr2, tr1, tr0
+mfmax.s.mv.i tr2, tr1, tr0[2]
+mfmax.d.mm tr2, tr1, tr0
+mfmax.d.mv.i tr2, tr1, tr0[2]
+mfmin.s.mm tr2, tr1, tr0
+mfmin.s.mv.i tr2, tr1, tr0[2]
+mfmin.h.mm tr2, tr1, tr0
+mfmin.h.mv.i tr2, tr1, tr0[2]
+mfmin.d.mm tr2, tr1, tr0
+mfmin.d.mv.i tr2, tr1, tr0[2]
+mfcvtl.h.e4 tr1, tr0
+mfcvth.h.e4 tr1, tr0
+mfcvtl.h.e5 tr1, tr0
 mfcvth.e4.h tr1, tr0
+mfcvtl.e5.h tr1, tr0
+mfcvth.e5.h tr1, tr0
+mfcvtl.s.h tr1, tr0
+mfcvth.s.h tr1, tr0
+mfcvtl.s.bf16 tr1, tr0
+mfcvth.s.bf16 tr1, tr0
+mfcvtl.e4.s tr1, tr0
+mfcvth.e4.s tr1, tr0
+mfcvtl.e5.s tr1, tr0
+mfcvth.e5.s tr1, tr0
+mfcvtl.h.s tr1, tr0
+mfcvth.h.s tr1, tr0
+mfcvtl.bf16.s tr1, tr0
+mfcvth.bf16.s tr1, tr0 
+mfcvt.tf32.s tr1, tr0
+mfcvt.s.tf32 tr1, tr0
+mfcvtl.d.s tr1, tr0
+mfcvth.d.s tr1, tr0
+mfcvtl.s.d tr1, tr0
+mfcvth.s.d tr1, tr0
+msfcvtl.h.b tr1, tr0 
+msfcvth.h.b tr1, tr0
+mufcvtl.h.b tr1, tr0
+mufcvth.h.b tr1, tr0
+mufcvt.s.w tr1, tr0
+mfscvt.w.s tr1, tr0
+mfucvt.w.s tr1, tr0
+mfucvtl.b.h tr1, tr0
+mfucvth.b.h tr1, tr0
+mfscvtl.b.h tr1, tr0
+mfscvth.b.h tr1, tr0
+mn4clipl.w.mm tr2, tr1, tr0
+mn4clipl.w.mv.i tr2, tr1, tr0[1]
+mn4cliph.w.mm tr2, tr1, tr0
+mn4cliph.w.mv.i tr2, tr1, tr0[1]
+mn4cliplu.w.mm tr2, tr1, tr0
+mn4cliplu.w.mv.i tr2, tr1, tr0[1]
+mn4cliphu.w.mm tr2, tr1, tr0
+mn4cliphu.w.mv.i tr2, tr1, tr0[1]
+mscvtl.b.p tr1, tr0
+mscvth.b.p tr1, tr0
+mucvtl.b.p tr1, tr0
+mucvth.b.p tr1, tr0
