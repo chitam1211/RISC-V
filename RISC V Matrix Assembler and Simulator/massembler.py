@@ -63,7 +63,7 @@ def encode_riscv_register(reg_name, is_immediate=False):
 # NHÓM 1: MATRIX CONFIGURATION INSTRUCTIONS (Table 2)
 # ------------------------------------------------------------------------
 matrix_config_instructions = {
-    "mrelease": {"instr_type": "CONFIG", "func": 0b0000, "uop": 0b00, "ctrl": 0b0, "rs2": 0b00000, "rs1": 0b00000, "fun_c3": 0b000, "nop": 0b00000, "major_opcode": 0b0101011, "operand_type": "none"},
+    "mrelease": {"instr_type": "CONFIG", "func": 0b1000, "uop": 0b00, "ctrl": 0b0, "rs2": 0b00000, "rs1": 0b00000, "fun_c3": 0b000, "nop": 0b00000, "major_opcode": 0b0101011, "operand_type": "none"},
     "msettileki": {"instr_type": "CONFIG","func": 0b0001,"uop": 0b00,"ctrl": 0b0,"fun_c3": 0b000,"nop": 0b00000, "major_opcode": 0b0101011, "operand_type": "immediate"},
     "msettilemi": {"instr_type": "CONFIG","func": 0b0010,"uop": 0b00,"ctrl": 0b0,"fun_c3": 0b000,"nop": 0b00000, "major_opcode": 0b0101011, "operand_type": "immediate"},
     "msettileni": {"instr_type": "CONFIG","func": 0b0011,"uop": 0b00,"ctrl": 0b0,"fun_c3": 0b000,"nop": 0b00000, "major_opcode": 0b0101011, "operand_type": "immediate"},
@@ -316,6 +316,7 @@ matrix_multiply_instructions = {
     "mmaccus.d.h": {"func": 0b0001, "uop": 0b01, "size_sup": 0b001, "s_size": 0b01, "func3": 0b000, "d_size": 0b11, "major_opcode": 0b0101011, "instr_type": "MULTIPLY"},
     "mmaccsu.d.h": {"func": 0b0001, "uop": 0b01, "size_sup": 0b010, "s_size": 0b01, "func3": 0b000, "d_size": 0b11, "major_opcode": 0b0101011, "instr_type": "MULTIPLY"},
     "mmacc.w.bp": {"func": 0b0010, "uop": 0b01, "size_sup": 0b011, "s_size": 0b00, "func3": 0b000, "d_size": 0b10, "major_opcode": 0b0101011, "instr_type": "MULTIPLY"},
+    "mmaccu.w.bp": {"func": 0b0010, "uop": 0b01, "size_sup": 0b000, "s_size": 0b00, "func3": 0b000, "d_size": 0b10, "major_opcode": 0b0101011, "instr_type": "MULTIPLY"},
 }
 
 def assemble_multiply(tokens, info):
@@ -418,45 +419,63 @@ matrix_loadstore_instructions = {
 }
 
 def assemble_loadstore(tokens, info):
+    # Kiểm tra số lượng token
+    if len(tokens) != 4:
+        raise ValueError(f"Lệnh load/store yêu cầu 4 token, nhưng nhận được {len(tokens)} token")
+    
+    # Phân tích các token
     mnemonic = tokens[0]
     
-    # Kiểm tra số lượng token để xác định loại lệnh
-    if len(tokens) == 4:
-        # Lệnh có rs2: ví dụ mlme8 md, (rs1), rs2
-        if mnemonic.startswith("ml"):  # Load
-            md_reg = tokens[1]
-            rs1_reg = tokens[2].strip("()")
-            rs2_reg = tokens[3]
-        elif mnemonic.startswith("ms"):  # Store
-            ms3_reg = tokens[1]
-            rs1_reg = tokens[2].strip("()")
-            rs2_reg = tokens[3]
-            md_reg = ms3_reg  # md/ms3 dùng chung
-        else:
-            raise ValueError(f"Không nhận dạng được lệnh: '{mnemonic}'")
-        rs2_val = encode_riscv_register(rs2_reg) & 0x1F  # 5-bit
-    elif len(tokens) == 3:
-        # Lệnh không có rs2: ví dụ mlme8 md, (rs1)
-        if mnemonic.startswith("ml"):  # Load
-            md_reg = tokens[1]
-            rs1_reg = tokens[2].strip("()")
-        elif mnemonic.startswith("ms"):  # Store
-            ms3_reg = tokens[1]
-            rs1_reg = tokens[2].strip("()")
-            md_reg = ms3_reg  # md/ms3 dùng chung
-        else:
-            raise ValueError(f"Không nhận dạng được lệnh: '{mnemonic}'")
-        rs2_val = 0  # Đặt rs2 = 00000
+    # Kiểm tra mnemonic có trong bảng băm không
+    if mnemonic not in matrix_loadstore_instructions:
+        raise ValueError(f"Lệnh không được hỗ trợ: '{mnemonic}'")
+    instr_info = matrix_loadstore_instructions[mnemonic]
+    
+    # Xác định loại lệnh
+    if mnemonic.startswith("ml"):  # Load
+        md_reg = tokens[1]           # Thanh ghi đích
+        rs1_reg = tokens[2].strip("()")  # Thanh ghi địa chỉ
+        rs2_reg = tokens[3]          # Thanh ghi rs2 (có trong cú pháp)
+    elif mnemonic.startswith("ms"):  # Store
+        ms3_reg = tokens[1]          # Thanh ghi nguồn
+        rs1_reg = tokens[2].strip("()")  # Thanh ghi địa chỉ
+        rs2_reg = tokens[3]          # Thanh ghi rs2 (có trong cú pháp)
+        md_reg = ms3_reg             # md/ms3 dùng chung
     else:
-        raise ValueError(f"Lệnh load/store không hợp lệ: '{tokens}'")
-
+        raise ValueError(f"Không nhận dạng được lệnh: '{mnemonic}'")
+    
     # Mã hóa thanh ghi
     md_val = encode_register(md_reg) & 0x7          # 3-bit
     rs1_val = encode_riscv_register(rs1_reg) & 0x1F  # 5-bit
-
-    # Tạo mã lệnh (giả định các trường khác từ info)
-    opc = info.get("major_opcode", 0) & 0x7F
-    code = (opc << 0) | (md_val << 7) | (rs1_val << 15) | (rs2_val << 20)
+    
+    # Đối với các lệnh đặc biệt, đặt rs2_val = 0 dù rs2_reg có trong cú pháp
+    special_instructions = ["msae8", "mlme8", "mlme16", "mlme32", "mlme64", 
+                           "msme8", "msme16", "msme32", "msme64"]
+    if mnemonic in special_instructions:
+        rs2_val = 0
+    else:
+        rs2_val = encode_riscv_register(rs2_reg) & 0x1F  # 5-bit
+    
+    # Lấy các giá trị từ bảng băm
+    func = instr_info["func"] & 0xF      # 4-bit (31-28)
+    uop = instr_info["uop"] & 0x3        # 2-bit (27-26)
+    ls = instr_info["ls"] & 0x1          # 1-bit (25)
+    func3 = instr_info["func3"] & 0x7    # 3-bit (14-12)
+    d_size = instr_info["d_size"] & 0x3  # 2-bit (11-10)
+    opcode = instr_info["major_opcode"] & 0x7F  # 7-bit (6-0)
+    
+    # Xây dựng mã lệnh 32-bit
+    code = 0
+    code |= (func << 28)    # bits 31-28
+    code |= (uop << 26)     # bits 27-26
+    code |= (ls << 25)      # bit 25
+    code |= (rs2_val << 20) # bits 24-20
+    code |= (rs1_val << 15) # bits 19-15
+    code |= (func3 << 12)   # bits 14-12
+    code |= (d_size << 10)  # bits 11-10
+    code |= (md_val << 7)   # bits 9-7
+    code |= opcode          # bits 6-0
+    
     return code
 
 # ------------------------------------------------------------------------
@@ -480,7 +499,8 @@ matrix_ew_instructions = {
 	"msll.w.mm": { "instr_type": "EW", "func": 0b1001, "uop": 0b01, "ctrl": 0b111, "s_size": 0b10, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
 	"msra.w.mm": { "instr_type": "EW", "func": 0b1010, "uop": 0b01, "ctrl": 0b111, "s_size": 0b10, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
 	"mfadd.h.mm": { "instr_type": "EW", "func": 0b0000, "uop": 0b10, "ctrl": 0b111, "s_size": 0b01, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
-	"mfadd.d.mm": { "instr_type": "EW", "func": 0b0000, "uop": 0b10, "ctrl": 0b111, "s_size": 0b11, "func3": 0b001, "d_size": 0b11, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
+	"mfadd.s.mm": { "instr_type": "EW", "func": 0b0000, "uop": 0b10, "ctrl": 0b111, "s_size": 0b01, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
+    "mfadd.d.mm": { "instr_type": "EW", "func": 0b0000, "uop": 0b10, "ctrl": 0b111, "s_size": 0b11, "func3": 0b001, "d_size": 0b11, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
 	"mfsub.h.mm": { "instr_type": "EW", "func": 0b0001, "uop": 0b10, "ctrl": 0b111, "s_size": 0b01, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
 	"mfsub.s.mm": { "instr_type": "EW", "func": 0b0001, "uop": 0b10, "ctrl": 0b111, "s_size": 0b10, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
 	"mfsub.d.mm": { "instr_type": "EW", "func": 0b0001, "uop": 0b10, "ctrl": 0b111, "s_size": 0b11, "func3": 0b001, "d_size": 0b11, "major_opcode": 0b0101011, "variant": "md_ms2_ms1"},
@@ -513,7 +533,7 @@ matrix_ew_instructions = {
 	"mfadd.s.mv.i": { "instr_type": "EW", "func": 0b0000, "uop": 0b10, "s_size": 0b10, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms2_ms1_imm3_direct"},
 	"mfadd.d.mv.i": { "instr_type": "EW", "func": 0b0000, "uop": 0b10, "s_size": 0b11, "func3": 0b001, "d_size": 0b11, "major_opcode": 0b0101011, "variant": "md_ms2_ms1_imm3_direct"},
 	"mfsub.h.mv.i": { "instr_type": "EW", "func": 0b0001, "uop": 0b10, "s_size": 0b01, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms2_ms1_imm3_direct"},
-	"mfsub.s.mv.i ": { "instr_type": "EW", "func": 0b0001, "uop": 0b10, "s_size": 0b10, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms2_ms1_imm3_direct"},
+	"mfsub.s.mv.i": { "instr_type": "EW", "func": 0b0001, "uop": 0b10, "s_size": 0b10, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms2_ms1_imm3_direct"},
 	"mfsub.d.mv.i": { "instr_type": "EW", "func": 0b0001, "uop": 0b10, "s_size": 0b11, "func3": 0b001, "d_size": 0b11, "major_opcode": 0b0101011, "variant": "md_ms2_ms1_imm3_direct"},
 	"mfmul.h.mv.i": { "instr_type": "EW", "func": 0b0010, "uop": 0b10, "s_size": 0b01, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms2_ms1_imm3_direct"},
 	"mfmul.s.mv.i": { "instr_type": "EW", "func": 0b0010, "uop": 0b10, "s_size": 0b10, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms2_ms1_imm3_direct"},
@@ -549,8 +569,10 @@ matrix_ew_instructions = {
 	"mfcvt.s.tf32": { "instr_type": "EW", "func": 0b0000, "uop": 0b00, "ctrl": 0b001, "ms2": 0b000, "s_size": 0b10, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms1"},
 	"mfcvtl.d.s": { "instr_type": "EW", "func": 0b0000, "uop": 0b00, "ctrl": 0b000, "ms2": 0b000, "s_size": 0b10, "func3": 0b001, "d_size": 0b11, "major_opcode": 0b0101011, "variant": "md_ms1"},
 	"mfcvth.d.s": { "instr_type": "EW", "func": 0b0000, "uop": 0b00, "ctrl": 0b010, "ms2": 0b000, "s_size": 0b10, "func3": 0b001, "d_size": 0b11, "major_opcode": 0b0101011, "variant": "md_ms1"},
-	"msfcvtl.h.b": { "instr_type": "EW", "func": 0b0001, "uop": 0b00, "ctrl": 0b001, "ms2": 0b000, "s_size": 0b00, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms1"},
-	"msfcvth.h.b ": { "instr_type": "EW", "func": 0b0001, "uop": 0b00, "ctrl": 0b011, "ms2": 0b000, "s_size": 0b10, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms1"},
+	"mfcvtl.s.d": { "instr_type": "EW", "func": 0b0000, "uop": 0b00, "ctrl": 0b000, "ms2": 0b000, "s_size": 0b11, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms1"},
+    "mfcvth.s.d": { "instr_type": "EW", "func": 0b0000, "uop": 0b00, "ctrl": 0b010, "ms2": 0b000, "s_size": 0b11, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms1"},
+    "msfcvtl.h.b": { "instr_type": "EW", "func": 0b0001, "uop": 0b00, "ctrl": 0b001, "ms2": 0b000, "s_size": 0b00, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms1"},
+	"msfcvth.h.b": { "instr_type": "EW", "func": 0b0001, "uop": 0b00, "ctrl": 0b011, "ms2": 0b000, "s_size": 0b10, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms1"},
 	"mufcvtl.h.b": { "instr_type": "EW", "func": 0b0001, "uop": 0b00, "ctrl": 0b000, "ms2": 0b000, "s_size": 0b00, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms1"},
 	"mufcvth.h.b": { "instr_type": "EW", "func": 0b0001, "uop": 0b00, "ctrl": 0b010, "ms2": 0b000, "s_size": 0b00, "func3": 0b001, "d_size": 0b01, "major_opcode": 0b0101011, "variant": "md_ms1"},
 	"mfcvtl.d.s": { "instr_type": "EW", "func": 0b0001, "uop": 0b00, "ctrl": 0b001, "ms2": 0b000, "s_size": 0b10, "func3": 0b001, "d_size": 0b10, "major_opcode": 0b0101011, "variant": "md_ms1"},
