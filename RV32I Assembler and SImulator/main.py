@@ -43,12 +43,12 @@ def write_data_memory_to_file(data_memory, output_file):
             f.write(f"0x{address:08x}\t{value}\n")
 
 def main():
-    input_file = r"E:\AI accelerator\Assembler\input.txt"
-    data_file = r"E:\AI accelerator\Assembler\data.txt"
-    temp_file = r"E:\AI accelerator\Assembler\temp.txt"
-    nlb_file = r"E:\AI accelerator\Assembler\no lb.txt"
-    output_file = r"E:\AI accelerator\Assembler\output.txt"
-    data_memory_file = r"E:\AI accelerator\Assembler\DataMemory.txt"
+    input_file = "input.txt"
+    data_file = "data.txt"
+    temp_file = "temp.txt"
+    nlb_file = "no lb.txt"
+    output_file = "output.txt"
+    data_memory_file = "DataMemory.txt"
 
     # Xử lý file
     preprocess_file(input_file, temp_file, data_file)
