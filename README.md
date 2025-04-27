@@ -1,4 +1,4 @@
 # RISC V
 ## Assembler và Instruction set simulator dành cho các lệnh số nguyên 32 bit (RV32I Base Integer Instructions)  
 - Tham khảo bảng datacard: `https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf`.
-- chạy `main.py` để chuyển hợp ngữ sang mã máy 32 bit sau đó chạy `simulator.py` để mô phỏng, kết quả được thể hiện trong `DataMemory.txt`.
+- Chạy `main.py` để chuyển hợp ngữ sang mã máy 32 bit sau đó chạy `simulator.py` để mô phỏng, kết quả được thể hiện trong `DataMemory.txt`.
